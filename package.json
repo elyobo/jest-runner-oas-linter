@@ -3,13 +3,19 @@
   "version": "0.0.1",
   "license": "MIT",
   "description": "A Jest runner for oas-linter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elyobo/jest-runner-oas-linter.git"
+  },
+  "author": "Liam O'Boyle <liam@elyobo.net>",
+  "bugs": {
+    "url": "https://github.com/elyobo/jest-runner-oas-linter/issues"
+  },
+  "homepage": "https://github.com/elyobo/jest-runner-oas-linter#readme",
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
     "format": "prettier-standard 'src/**/*.js'"
-  },
-  "jest": {
-    "runner": "./test/runner"
   },
   "husky": {
     "hooks": {
