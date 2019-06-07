@@ -1,37 +1,38 @@
 {
-    "name": "oas-linter-runner",
-    "version": "1.0.0",
-    "description": "A Jest runner for oas-linter",
-    "main": "src/index.js",
-    "scripts": {
-        "test": "jest",
-        "format": "prettier-standard 'src/**/*.js'"
-    },
-    "jest": {
-      "runner": "./test/runner"
-    },
-    "husky": {
-      "hooks": {
-        "pre-commit": "lint-staged"
-      }
-    },
-    "lint-staged": {
-      "linters": {
-        "src/**/*.js": [
-          "prettier-standard",
-          "git add"
-        ]
-      }
-    },
-    "dependencies": {
-      "create-jest-runner": "^0.5.0",
-      "jest": "^24.6.0",
-      "oas-linter": "^3.0.1",
-      "oas-validator": "^3.3.0"
-    },
-    "devDependencies": {
-      "husky": "^2.4.0",
-      "lint-staged": "^8.2.0",
-      "prettier-standard": "^9.1.1"
+  "name": "jest-runner-oas-linter",
+  "version": "0.0.1",
+  "description": "A Jest runner for oas-linter",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "format": "prettier-standard 'src/**/*.js'"
+  },
+  "jest": {
+    "runner": "./test/runner"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "linters": {
+      "src/**/*.js": [
+        "prettier-standard",
+        "git add"
+      ]
+    }
+  },
+  "dependencies": {
+    "create-jest-runner": "^0.5.0",
+    "jest": "^24.6.0",
+    "oas-linter": "^3.0.1",
+    "oas-validator": "^3.3.0",
+    "pkg-dir": "^4.2.0"
+  },
+  "devDependencies": {
+    "husky": "^2.4.0",
+    "lint-staged": "^8.2.0",
+    "prettier-standard": "^9.1.1"
+  }
 }
