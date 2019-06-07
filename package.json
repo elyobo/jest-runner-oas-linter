@@ -1,0 +1,18 @@
+{
+    "name": "oas-linter-runner",
+    "version": "1.0.0",
+    "description": "A Jest runner for oas-linter",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "jest": {
+        "runner": "./test/runner"
+    },
+    "dependencies": {
+        "create-jest-runner": "^0.5.0",
+        "jest": "^24.6.0",
+        "oas-linter": "^3.0.1",
+        "oas-validator": "^3.3.0"
+    }
+}
