@@ -11,6 +11,7 @@ const linter = require('oas-linter')
 const pkgDir = require('pkg-dir')
 
 const DEFAULT_CONFIG = {
+  loadDefaultRules: true,
   rules: []
 }
 
@@ -43,7 +44,8 @@ const applyConfig = (() => {
     if (applied) return
     applied = true
 
-    const { rules = [] } = config
+    const { loadDefaultRules, rules = [] } = config
+    if (loadDefaultRules) linter.loadDefaultRules()
     if (rules.length) linter.applyRules({ rules })
   }
 })()

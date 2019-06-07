@@ -109,19 +109,23 @@ module.exports = {
 
 Configuration can be specified in you project root in `.oaslintrc.json`, or in an `oaslintConfig` in the `package.json` file.
 
-Currently the only option is to specify additional rules to be applied, as per oas-linter's [applyRules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/index.js#L12).  More details about the format of rules supported can be found over at `oas-kit`'s [linter rules](https://mermade.github.io/oas-kit/linter-rules.html) documentation.
+Currently the only two options are to specify whether the default rules should be loaded with `loadDefaultRules` and to specify additional rules to be applied.
+
+* `loadDefaultRules` is boolean and defaults to true, [oas-linter default rules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/rules.yaml) can be seen over there
+* `rules` is an array of objects, as per oas-linter's [applyRules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/index.js#L12).  More details about the format of rules supported can be found over at `oas-kit`'s [linter rules](https://mermade.github.io/oas-kit/linter-rules.html) documentation and the default rules (link above) have many examples.
 
 In your `package.json`
 
 ```json
 {
   "oaslintConfig": {
+    "loadDefaultRules": true,
     "rules": [
       {
         "name": "schema-property-require-description",
-          "object": "schema",
-          "description": "schema properties must have a description",
-          "truthy": "description"
+        "object": "schema",
+        "description": "schema properties must have a description",
+        "truthy": "description"
       }
     ]
   }
@@ -132,12 +136,13 @@ Or in `.oaslintrc.json`
 
 ```json
 {
+  "loadDefaultRules": true,
   "rules": [
     {
       "name": "schema-property-require-description",
-        "object": "schema",
-        "description": "schema properties must have a description",
-        "truthy": "description"
+      "object": "schema",
+      "description": "schema properties must have a description",
+      "truthy": "description"
     }
   ]
 }
