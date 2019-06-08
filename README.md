@@ -107,7 +107,7 @@ module.exports = {
 
 ### Configure OAS Linter
 
-Configuration can be specified in you project root in `.oaslintrc.json`, or in an `oaslintConfig` in the `package.json` file.
+Configuration can be specified in your project root in `.oaslintrc.json`, or in an `oaslintConfig` in the `package.json` file.
 
 Currently the only two options are to specify whether the default rules should be loaded with `loadDefaultRules` and to specify additional rules to be applied.
 
