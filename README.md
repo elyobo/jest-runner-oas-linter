@@ -28,6 +28,10 @@ module.exports = YAML.parse(file)
 
 This is very alpha; no tests have been written, no promises made, YMMV.
 
+## Compatibility
+
+This module is compatible with Node v8.x and upwards.  Any incompatibilities with those versions should be reported as bugs.
+
 ## Usage
 
 ### Install
