@@ -74,6 +74,10 @@ const loadConfig = testPath =>
 // Run tests on a given file
 const run = ({ testPath, config, globalConfig }) => {
   const schema = require(testPath)
+
+  // Avoid caching for `--watch` mode
+  delete delete require.cache[require.resolve(testPath)]
+
   const test = {
     path: testPath,
     title: 'OAS Linter'
