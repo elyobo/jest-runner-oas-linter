@@ -7,7 +7,7 @@ const {
   default: toTestResult
 } = require('create-jest-runner/build/toTestResult')
 const validator = require('oas-validator')
-const linter = require('oas-linter')
+const oasLinter = require('oas-linter')
 const pkgDir = require('pkg-dir')
 
 const DEFAULT_CONFIG = {
@@ -35,21 +35,6 @@ const exists = path =>
     )
   )
 
-// Apply config to the linter; we only want to do this once, as there's only
-// one linter at the moment (https://github.com/Mermade/oas-kit/issues/177)
-const applyConfig = (() => {
-  let applied = false
-
-  return config => {
-    if (applied) return
-    applied = true
-
-    const { loadDefaultRules, rules = [] } = config
-    if (loadDefaultRules) linter.loadDefaultRules()
-    if (rules.length) linter.applyRules({ rules })
-  }
-})()
-
 // Load config from .oaslint.json or from package.json oaslintConfig field
 const loadConfig = testPath =>
   pkgDir(path.dirname(testPath)).then(dir => {
@@ -68,7 +53,6 @@ const loadConfig = testPath =>
       .then(config =>
         config ? { ...DEFAULT_CONFIG, ...config } : DEFAULT_CONFIG
       )
-      .then(applyConfig)
   })
 
 // Run tests on a given file
@@ -99,8 +83,15 @@ const run = ({ testPath, config, globalConfig }) => {
   }
 
   return loadConfig(testPath).then(
-    () =>
+    config =>
       new Promise((resolve, reject) => {
+        const { loadDefaultRules, rules = [] } = config
+        const linter = oasLinter.getLinter()
+        console.log(linter === oasLinter.getLinter())
+
+        if (loadDefaultRules) linter.loadDefaultRules()
+        if (rules.length) linter.applyRules({ rules })
+
         validator.validate(
           schema,
           {
@@ -129,10 +120,12 @@ const run = ({ testPath, config, globalConfig }) => {
             }
 
             // Schema is valid, but warnings (lint failures) were present
+            const tests = warnings.map(
+              warningToTest(result.end - result.start, testPath)
+            )
             resolve(
               toTestResult({
-                errorMessage:
-                  'Schema is valid, but linting errors were present.',
+                errorMessage: tests[0].errorMessage,
                 stats: {
                   failures: warnings.length,
                   pending: 0,
@@ -141,9 +134,7 @@ const run = ({ testPath, config, globalConfig }) => {
                   start: result.start,
                   end: result.end
                 },
-                tests: warnings.map(
-                  warningToTest(result.end - result.start, testPath)
-                ),
+                tests,
                 jestTestPath: testPath
               })
             )
