@@ -9,6 +9,7 @@ const {
 const validator = require('oas-validator')
 const linter = require('oas-linter')
 const pkgDir = require('pkg-dir')
+const nodeEval = require('node-eval')
 
 const DEFAULT_CONFIG = {
   loadDefaultRules: true,
@@ -17,13 +18,13 @@ const DEFAULT_CONFIG = {
 
 // Map an oas-linter warning to jest test result
 const warningToTest = (duration, testPath) => warning => {
-  const { ruleName, message, pointer } = warning
+  const { ruleName, pointer, rule } = warning
 
   return {
     duration,
-    errorMessage: message, // Does not seem to be used in reporters
+    errorMessage: `${rule.description} on ${pointer.replace(/~1/g, '/')}`, // Does not seem to be used in reporters
     testPath,
-    title: `${message} - ${pointer} (${ruleName})`
+    title: ruleName
   }
 }
 
@@ -73,10 +74,25 @@ const loadConfig = testPath =>
 
 // Run tests on a given file
 const run = ({ testPath, config, globalConfig }) => {
-  const schema = require(testPath)
+  const { transform } = config
 
-  // Avoid caching for `--watch` mode
-  delete delete require.cache[require.resolve(testPath)]
+  let schema
+  let fileContent = fs.readFileSync(testPath, { encoding: 'utf-8' })
+
+  if (
+    !config.transformIgnorePatterns
+      .map(x => new RegExp(x))
+      .find(x => x.test(testPath))
+  ) {
+    const transformer = transform.find(x => new RegExp(x[0]).test(testPath))
+
+    if (transformer) {
+      const transformerObj = require(transformer[1])
+      fileContent = transformerObj.process(fileContent, testPath, config)
+    }
+  }
+
+  schema = nodeEval(fileContent, testPath)
 
   const test = {
     path: testPath,
@@ -123,7 +139,7 @@ const run = ({ testPath, config, globalConfig }) => {
               return resolve(
                 fail({
                   ...result,
-                  errorMessage: 'Not a valid OpenAPI schema.'
+                  errorMessage: 'Not a valider OpenAPI schema: ' + error.message
                 })
               )
             }
@@ -133,6 +149,7 @@ const run = ({ testPath, config, globalConfig }) => {
               toTestResult({
                 errorMessage:
                   'Schema is valid, but linting errors were present.',
+                skipped: false,
                 stats: {
                   failures: warnings.length,
                   pending: 0,
