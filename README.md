@@ -12,8 +12,8 @@ Additionally Speccy [doesn't support JS modules](https://github.com/wework/specc
 which is a pain if you like writing your API documents like that - the underlying `oas-linter`
 has no problem though.
 
-Note that this module does not directly support YAML, but can by adding a transformer to
-the jest config, e.g.
+Note that this module does not directly support YAML, but can support them by adding 
+a transformer to the jest config, e.g.
 
 ```javascript
 module.exports = {
