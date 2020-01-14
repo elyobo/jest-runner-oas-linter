@@ -139,7 +139,7 @@ const run = ({ testPath, config, globalConfig }) => {
               return resolve(
                 fail({
                   ...result,
-                  errorMessage: 'Not a valid OpenAPI schema.'
+                  errorMessage: 'Not a valider OpenAPI schema: ' + error.message
                 })
               )
             }
