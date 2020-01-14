@@ -12,16 +12,19 @@ Additionally Speccy [doesn't support JS modules](https://github.com/wework/specc
 which is a pain if you like writing your API documents like that - the underlying `oas-linter`
 has no problem though.
 
-Note that this module does not directly support YAML, but can by adding a wrapper
-file that parses your YAML and linting that instead, e.g. install [yaml](https://www.npmjs.com/package/yaml)
-and then create an `api.js` to lint, e.g.
+Note that this module does not directly support YAML, but can by adding a transformer to
+the jest config, e.g.
 
 ```javascript
-const fs = require('fs')
-const YAML = require('yaml')
-
-const file = fs.readFileSync('./file.yml', 'utf8')
-module.exports = YAML.parse(file)
+module.exports = {
+  runner: "oas-linter",
+  displayName: "oas-linter",
+  transform: {
+    "\\.yaml$": "jest-yaml-transform",
+  },
+  testMatch: ["<rootDir>/api/*.yaml"],
+  moduleFileExtensions: ["yaml"],
+};
 ```
 
 ## Warning

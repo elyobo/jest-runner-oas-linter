@@ -73,7 +73,32 @@ const loadConfig = testPath =>
 
 // Run tests on a given file
 const run = ({ testPath, config, globalConfig }) => {
-  const schema = require(testPath)
+  const { transform } = config
+
+  let schema
+
+  if (
+    !config.transformIgnorePatterns
+      .map(x => new RegExp(x))
+      .find(x => x.test(testPath))
+  ) {
+    const transformer = transform.find(x => new RegExp(x[0]).test(testPath))
+
+    if (transformer) {
+      const transformerObj = require(transformer[1])
+      const content = transformerObj.process(
+        fs.readFileSync(testPath, { encoding: 'utf-8' }),
+        testPath,
+        config
+      )
+
+      schema = eval(content)
+    }
+  }
+
+  if (!schema) {
+    schema = require(testPath)
+  }
 
   // Avoid caching for `--watch` mode
   delete delete require.cache[require.resolve(testPath)]
