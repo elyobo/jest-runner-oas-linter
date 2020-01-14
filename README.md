@@ -12,7 +12,7 @@ Additionally Speccy [doesn't support JS modules](https://github.com/wework/specc
 which is a pain if you like writing your API documents like that - the underlying `oas-linter`
 has no problem though.
 
-Note that this module does not directly support YAML, but can support them by adding 
+Note that this module does not directly support YAML, but can support them by adding
 a transformer to the jest config, e.g.
 
 ```javascript
@@ -20,10 +20,10 @@ module.exports = {
   runner: "oas-linter",
   displayName: "oas-linter",
   transform: {
-    "\\.yaml$": "jest-yaml-transform",
+    "\\.yaml$": "jest-yaml-transform-not-flattened"
   },
   testMatch: ["<rootDir>/api/*.yaml"],
-  moduleFileExtensions: ["yaml"],
+  moduleFileExtensions: ["yaml"]
 };
 ```
 
@@ -33,7 +33,7 @@ This is very alpha; no tests have been written, no promises made, YMMV.
 
 ## Compatibility
 
-This module is compatible with Node v8.x and upwards.  Any incompatibilities with those versions should be reported as bugs.
+This module is compatible with Node v8.x and upwards. Any incompatibilities with those versions should be reported as bugs.
 
 ## Usage
 
@@ -51,7 +51,7 @@ yarn add --dev jest jest-runner-oas-linter
 
 ### Add your runner to Jest config
 
-Once you have your Jest runner you can add it to your Jest config.  You will almost
+Once you have your Jest runner you can add it to your Jest config. You will almost
 certainly want to configure separate Jest [projects](https://jestjs.io/docs/en/configuration#projects-array-string-projectconfig)
 and only use this runner on modules that export an OpenAPI document.
 
@@ -78,14 +78,14 @@ In your `jest-oas-linter.config.js`
 
 ```js
 module.exports = {
-  runner: 'oas-linter',
-  displayName: 'oas-linter',
+  runner: "oas-linter",
+  displayName: "oas-linter",
   testMatch: [
-    '<rootDir>/path/to/your/api/doc.js',
-    '<rootDir>/path/to/another/api/doc.js',
-    '<rootDir>/path/to/another/api/doc/**/*.js',
-  ],
-}
+    "<rootDir>/path/to/your/api/doc.js",
+    "<rootDir>/path/to/another/api/doc.js",
+    "<rootDir>/path/to/another/api/doc/**/*.js"
+  ]
+};
 ```
 
 #### Minimal Steps
@@ -107,8 +107,8 @@ Or in `jest.config.js`
 
 ```js
 module.exports = {
-  runner: 'oas-linter',
-  testMatch: ['<rootDir>/path/to/your/api/doc.js'],
+  runner: "oas-linter",
+  testMatch: ["<rootDir>/path/to/your/api/doc.js"]
 };
 ```
 
@@ -118,8 +118,8 @@ Configuration can be specified in your project root in `.oaslintrc.json`, or in 
 
 Currently the only two options are to specify whether the default rules should be loaded with `loadDefaultRules` and to specify additional rules to be applied.
 
-* `loadDefaultRules` is boolean and defaults to true, [oas-linter default rules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/rules.yaml) can be seen over there
-* `rules` is an array of objects, as per oas-linter's [applyRules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/index.js#L12).  More details about the format of rules supported can be found over at `oas-kit`'s [linter rules](https://mermade.github.io/oas-kit/linter-rules.html) documentation and the default rules (link above) have many examples.
+- `loadDefaultRules` is boolean and defaults to true, [oas-linter default rules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/rules.yaml) can be seen over there
+- `rules` is an array of objects, as per oas-linter's [applyRules](https://github.com/Mermade/oas-kit/blob/master/packages/oas-linter/index.js#L12). More details about the format of rules supported can be found over at `oas-kit`'s [linter rules](https://mermade.github.io/oas-kit/linter-rules.html) documentation and the default rules (link above) have many examples.
 
 In your `package.json`
 
