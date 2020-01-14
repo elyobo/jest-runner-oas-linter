@@ -18,13 +18,13 @@ const DEFAULT_CONFIG = {
 
 // Map an oas-linter warning to jest test result
 const warningToTest = (duration, testPath) => warning => {
-  const { ruleName, message, pointer } = warning
+  const { ruleName, pointer, rule } = warning
 
   return {
     duration,
-    errorMessage: message, // Does not seem to be used in reporters
+    errorMessage: `${rule.description} on ${pointer.replace(/~1/g, '/')}`, // Does not seem to be used in reporters
     testPath,
-    title: `${message} - ${pointer} (${ruleName})`
+    title: ruleName
   }
 }
 
