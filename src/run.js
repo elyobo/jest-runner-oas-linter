@@ -9,6 +9,7 @@ const {
 const validator = require('oas-validator')
 const linter = require('oas-linter')
 const pkgDir = require('pkg-dir')
+const nodeEval = require('node-eval')
 
 const DEFAULT_CONFIG = {
   loadDefaultRules: true,
@@ -76,6 +77,7 @@ const run = ({ testPath, config, globalConfig }) => {
   const { transform } = config
 
   let schema
+  let fileContent = fs.readFileSync(testPath, { encoding: 'utf-8' })
 
   if (
     !config.transformIgnorePatterns
@@ -86,22 +88,11 @@ const run = ({ testPath, config, globalConfig }) => {
 
     if (transformer) {
       const transformerObj = require(transformer[1])
-      const content = transformerObj.process(
-        fs.readFileSync(testPath, { encoding: 'utf-8' }),
-        testPath,
-        config
-      )
-
-      schema = eval(content)
+      fileContent = transformerObj.process(fileContent, testPath, config)
     }
   }
 
-  if (!schema) {
-    schema = require(testPath)
-  }
-
-  // Avoid caching for `--watch` mode
-  delete delete require.cache[require.resolve(testPath)]
+  schema = nodeEval(fileContent, testPath)
 
   const test = {
     path: testPath,
@@ -158,6 +149,7 @@ const run = ({ testPath, config, globalConfig }) => {
               toTestResult({
                 errorMessage:
                   'Schema is valid, but linting errors were present.',
+                skipped: false,
                 stats: {
                   failures: warnings.length,
                   pending: 0,

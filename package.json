@@ -33,6 +33,7 @@
   "dependencies": {
     "create-jest-runner": "^0.5.3",
     "jest": "^24.6.0",
+    "node-eval": "^2.0.0",
     "oas-linter": "^3.0.1",
     "oas-validator": "^3.3.0",
     "pkg-dir": "^4.2.0"
